@@ -33,31 +33,31 @@
         <strong>错误！</strong>发生XXX错误
       </div> -->
             <div class="row">
-                <div class="col-md-4">
-                    <form id="userForm">
+                <div class="col-md-4" id="modfiyBox">
+                    <form id="userSubmit">
                         <h2>添加新用户</h2>
                         <div class="form-group">
                             <label>头像</label>
                             <div class="form-group">
                                 <label class="form-image">
                   <input id="avatar" type="file">
-                  <img id="preview" src="../assets/img/default.png">
-                  <i id="avatarHidden" class="mask fa fa-upload"></i>
+                  <img id="youphoto" src="../assets/img/default.png">
+                  <i class="mask fa fa-upload"></i>
                 </label>
                                 <input id="avatarHidden" type="hidden" name="avatar">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>邮箱</label>
-                            <input class="form-control" type="email" placeholder="请输入邮箱" name="email">
+                            <input name="email" class="form-control" type="email" placeholder="请输入邮箱">
                         </div>
                         <div class="form-group">
                             <label>昵称</label>
-                            <input class="form-control" type="text" placeholder="请输入昵称" name="nickName">
+                            <input name="nickName" class="form-control" type="text" placeholder="请输入昵称">
                         </div>
                         <div class="form-group">
                             <label>密码</label>
-                            <input class="form-control" type="text" placeholder="请输入密码" name="password">
+                            <input name="password" class="form-control" type="text" placeholder="请输入密码">
                         </div>
                         <div class="form-group">
                             <div class="radio-inline">
@@ -83,12 +83,12 @@
                 <div class="col-md-8">
                     <div class="page-action">
                         <!-- show when multiple checked -->
-                        <a class="btn btn-danger btn-sm" href="javascript:;" style="display: none" id="deleteMany">批量删除</a>
+                        <a class="btn btn-danger btn-sm" href="javascript:;" style="display: none">批量删除</a>
                     </div>
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th class="text-center" width="40"><input type="checkbox" id="checkedAll"></th>
+                                <th class="text-center" width="40"><input type="checkbox"></th>
                                 <th class="text-center" width="80">头像</th>
                                 <th>邮箱</th>
                                 <th>昵称</th>
@@ -97,7 +97,7 @@
                                 <th class="text-center" width="100">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="userBody">
+                        <tbody id="userbody">
 
                         </tbody>
                     </table>
@@ -146,30 +146,29 @@
     <script src="../assets/vendors/jquery/jquery.js"></script>
     <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
     <script src="../assets/vendors/art-template/template-web.js"></script>
-
     <script>
         NProgress.done()
     </script>
+    <!-- 模板字符串拼接 -->
     <script type="text/html" id="userTpl">
-        {{each response}}
+        {{each data}}
         <tr>
-            <td class="text-center"><input type="checkbox" class="findOne" response-id="{{$value._id}}"></td>
+            <td class="text-center"><input type="checkbox"></td>
             <td class="text-center">
                 {{if $value.avatar}}
-                <img class="avatar" src="../assets/img/default.png"> {{/if}}
+                <img class="avatar" src="http://47.111.184.55:3000{{$value.avatar}}"> {{/if}}
             </td>
             <td>{{$value.email}}</td>
             <td>{{$value.nickName}}</td>
-            <td>{{$value.status=='1'?'激活':'未激活'}}</td>
-            <td>{{$value.role=='admin'?'管理员':'普通用户'}}</td>
+            <td>{{$value.status == '1'?'激活':'未激活'}}</td>
+            <td>{{$value.role == 'admin'?'管理员':'普通用户'}}</td>
             <td class="text-center">
-                <a href="javascript:;" response-id="{{$value._id}}" class="btn btn-default btn-xs edit">编辑</a>
-                <a href="javascript:;" class="btn btn-danger btn-xs delete" response-id="{{$value._id}}">删除</a>
+                <a href="javascript:;" data-id="{{$value._id}}" class="btn btn-default btn-xs edit">编辑</a>
+                <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
             </td>
         </tr>
         {{/each}}
     </script>
-
     <!-- 修改用户字符串拼接 -->
     <script type="text/html" id="modfitTpl">
         <form id="userSubmit" data-id="{{_id}}">
@@ -180,9 +179,9 @@
                     <label class="form-image">
             <input id="avatar" type="file">
             {{if avatar}}
-             <img id="preview" src="http://47.111.184.55:3000{{avatar}}">
+             <img id="youphoto" src="http://47.111.184.55:3000{{avatar}}">
             {{else}}
-              <img id='preview' src="../assets/img/default.png">
+              <img id="youphoto" src="../assets/img/default.png">
             {{/if}}
             <i class="mask fa fa-upload"></i>
           </label>
@@ -222,7 +221,101 @@
             </div>
         </form>
     </script>
-    <script src="../assets/js/user.js"></script>
+    <script>
+        $(function() {
+            // 添加用户功能
+            $("#userSubmit").on('submit', function() {
+                    // 获得填写的表单信息
+                    var formDate = $(this).serialize();
+                    // 发送ajax请求
+                    $.ajax({
+                            type: 'post',
+                            url: 'http://47.111.184.55:3000/users',
+                            data: formDate,
+                            success: function(data) {
+                                location.reload()
+                            },
+                            error: function() {
+                                alert('提交错误')
+                            }
+                        })
+                        // 阻止默认行为
+                    return false
+                })
+                // 上传图片功能
+            $("#modfiyBox").on('change', '#avatar', function() {
+                    // 获取信息
+                    var formData = new FormData();
+                    // 将选取的图片信息存放在formData
+                    formData.append('avatar', this.files[0]);
+                    // 发送ajax请求
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://47.111.184.55:3000/upload',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            // 将路径与服务器地址拼接
+                            var imgData = 'http://47.111.184.55:3000' + data[0].avatar;
+                            console.log(data[0].avatar);
+                            // 将返回的文件地址赋值给img
+                            $('#youphoto').attr('src', imgData);
+                            // 将地址赋值给隐藏域
+                            $('#avatarHidden').val(data[0].avatar)
+                        },
+                        error: function() {
+                            alert('文件上传错误')
+                        }
+                    })
+                })
+                // 用户列表添加功能
+            $.ajax({
+                    type: 'get',
+                    url: 'http://47.111.184.55:3000/users',
+                    success: function(data) {
+                        // 拼接模板字符串
+                        var html = template('userTpl', {
+                            data: data
+                        });
+                        $('#userbody').html(html);
+                    }
+                })
+                // 利用事件委托实现编辑功能
+            $('#userbody').on('click', '.edit', function() {
+                    // 获取当前的id值
+                    var id = $(this).attr('data-id');
+                    // 发送ajax请求
+                    $.ajax({
+                        type: 'put',
+                        url: `http://47.111.184.55:3000/users/${id}`,
+                        success: function(data) {
+                            var html = template('modfitTpl', data)
+                            $('#modfiyBox').html(html)
+                        }
+                    })
+                })
+                // 实现修改功能
+            $('#modfiyBox').on('submit', '#userSubmit', function() {
+                // 获取需要修改的id
+                var id = $(this).attr('data-id');
+                // 获取表单内容
+                var formData = $(this).serialize();
+                // console.log(formData);
+                // console.log(id);
+                $.ajax({
+                    type: 'put',
+                    url: `http://47.111.184.55:3000/users/${id}`,
+                    data: formData,
+                    success: function(data) {
+                        // 重新刷新页面
+                        location.reload()
+                    }
+                })
+                return false
+            })
+        })
+    </script>
 </body>
 
 </html>
