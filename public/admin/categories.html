@@ -143,36 +143,6 @@
     <script>
         NProgress.done()
     </script>
-    <!-- <script>
-        $(function() {
-            $('#addCategory').on('submit', function(e) {
-                    e.preventDefault()
-                    var formData = $(this).serialize()
-                    $.ajax({
-                        type: 'post',
-                        url: 'http://47.111.184.55:3000/categories',
-                        data: formData,
-                        success: function() {
-                            location.reload()
-                                // console.log(response);
-                        }
-                    })
-                })
-                // return false;
-            $.ajax({
-                url: 'http://47.111.184.55:3000/categories',
-                type: 'get',
-                success: function(response) {
-                    console.log(response);
-                    var html = template('cateListTpl', {
-                        response: response
-                    })
-                    $('#cateListBox').html(html)
-
-                }
-            })
-        })
-    </script> -->
 </body>
 
 </html>
