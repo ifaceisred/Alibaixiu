@@ -73,3 +73,16 @@ $('#filterForm').on('submit', function() {
     //阻止表单默认提交行为
     return false
 })
+$('#postsBox').on('click', '.delete', function() {
+    var id = $(this).attr('response-id')
+    if (confirm('残忍删除？')) {
+        $.ajax({
+            type: 'delete',
+            url: `http://47.111.184.55:3000/posts/${id}`,
+            success: function() {
+                location.reload()
+                alert('算你狠')
+            }
+        })
+    }
+})
