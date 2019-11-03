@@ -7,7 +7,7 @@
          {{each response}}
          <li>
             <a href="/detail.html?id={{$value._id}}">
-                <img src="{{$value.thumbnail}}" alt="">
+                <img src="http://47.111.184.55:3000{{$value.thumbnail}}" alt="">
                 <span>{{$value.title}}</span>
             </a>
         </li>

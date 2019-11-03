@@ -197,78 +197,7 @@
             </div>
             <div class="panel new">
                 <h3>最新发布</h3>
-                <div class="entry">
-                    <div class="head">
-                        <span class="sort">会生活</span>
-                        <a href="javascript:;">星球大战：原力觉醒视频演示 电影票68</a>
-                    </div>
-                    <div class="main">
-                        <p class="info">admin 发表于 2020-06-20</p>
-                        <p class="brief">星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯</p>
-                        <p class="extra">
-                            <span class="reading">阅读(3406)</span>
-                            <span class="comment">评论(0)</span>
-                            <a href="javascript:;" class="like">
-                                <i class="fa fa-thumbs-up"></i>
-                                <span>赞(167)</span>
-                            </a>
-                            <a href="javascript:;" class="tags">
-                分类：<span>星球大战</span>
-              </a>
-                        </p>
-                        <a href="javascript:;" class="thumb">
-                            <img src="uploads/hots_2.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="entry">
-                    <div class="head">
-                        <span class="sort">会生活</span>
-                        <a href="javascript:;">星球大战：原力觉醒视频演示 电影票68</a>
-                    </div>
-                    <div class="main">
-                        <p class="info">admin 发表于 2020-06-20</p>
-                        <p class="brief">星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯</p>
-                        <p class="extra">
-                            <span class="reading">阅读(3406)</span>
-                            <span class="comment">评论(0)</span>
-                            <a href="javascript:;" class="like">
-                                <i class="fa fa-thumbs-up"></i>
-                                <span>赞(167)</span>
-                            </a>
-                            <a href="javascript:;" class="tags">
-                分类：<span>星球大战</span>
-              </a>
-                        </p>
-                        <a href="javascript:;" class="thumb">
-                            <img src="uploads/hots_2.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="entry">
-                    <div class="head">
-                        <span class="sort">会生活</span>
-                        <a href="javascript:;">星球大战：原力觉醒视频演示 电影票68</a>
-                    </div>
-                    <div class="main">
-                        <p class="info">admin 发表于 2020-06-20</p>
-                        <p class="brief">星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯，星球大战:原力觉醒：《星球大战:原力觉醒》中国首映盛典红毯</p>
-                        <p class="extra">
-                            <span class="reading">阅读(3406)</span>
-                            <span class="comment">评论(0)</span>
-                            <a href="javascript:;" class="like">
-                                <i class="fa fa-thumbs-up"></i>
-                                <span>赞(167)</span>
-                            </a>
-                            <a href="javascript:;" class="tags">
-                分类：<span>星球大战</span>
-              </a>
-                        </p>
-                        <a href="javascript:;" class="thumb">
-                            <img src="uploads/hots_2.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
+                <div id="lastedBox"></div>
             </div>
         </div>
         <div class="footer">
@@ -278,6 +207,7 @@
     <script src="assets/vendors/jquery/jquery.js"></script>
     <script src="assets/vendors/swipe/swipe.js"></script>
     <script src="assets/vendors/art-template/template-web.js"></script>
+    <script src="assets/js/home.js"></script>
     <script src="assets/js/recommend.js"></script>
     <!-- 萝卜图模板 -->
     <script type="text/html" id="swiperTpl">
@@ -288,6 +218,35 @@
                 <span>{{$value.title}}</span>
             </a>
         </li>
+        {{/each}}
+    </script>
+    <!-- 最新发布模板 -->
+    <script type="text/html" id="lastedTpl">
+        {{each response}}
+        <div class="entry">
+            <div class="head">
+
+                <a href="detail.html?id={{$value._id}}">{{$value.title}}</a>
+            </div>
+            <div class="main">
+                <p class="info">{{$value.author == null ? 'admin' : $value.author}} 发表于 {{$value.createAt == null ? '' : $value.createAt.split('T')[0]}}</p>
+                <p class="brief">{{$value.content}}</p>
+                <p class="extra">
+                    <span class="reading">阅读({{$value.meta.views}})</span>
+                    <span class="comment">评论({{$value.meta.comments}})</span>
+                    <a href="detail.html?id={{$value._id}}" class="like">
+                        <i class="fa fa-thumbs-up"></i>
+                        <span>赞({{$value.meta.likes}})</span>
+                    </a>
+                    <a href="detail.html?id={{$value._id}}" class="tags">
+            分类：<span>{{$value.category.title}}</span>
+          </a>
+                </p>
+                <a href="detail.html?id={{$value._id}}" class="thumb">
+                    <img src="http://47.111.184.55:3000{{$value.thumbnail}}" alt="">
+                </a>
+            </div>
+        </div>
         {{/each}}
     </script>
 
