@@ -15,7 +15,8 @@ $('#file').on('change', function() {
             contentType: false,
             success: function(response) {
                 console.log(response[0].image);
-                $('#image').val(response[0].image)
+                //地址前面加http://47.111.184.55:3000
+                $('#image').val('http://47.111.184.55:3000' + response[0].image)
             }
         })
     })

@@ -17,9 +17,10 @@ $('#logo').on('change', function() {
         contentType: false,
         success: function(response) {
             console.log(response);
-            $('#logoman').val(response[0].logo)
+            //地址前面加http://47.111.184.55:3000
+            $('#logoman').val('http://47.111.184.55:3000' + response[0].logo)
                 //将logo图片显示在页面中
-            $('#preview').attr('src', response[0].logo)
+            $('#preview').attr('src', 'http://47.111.184.55:3000' + response[0].logo)
         }
     })
 })
@@ -30,13 +31,35 @@ $('#settingsForm').on('submit', function() {
     var formData = $(this).serialize()
         //向服务端发送请求 实现网站设置数据添加
     $.ajax({
-            type: 'post',
-            url: 'http://47.111.184.55:3000/settings',
-            data: formData,
-            success: function() {
-                location.reload()
-            }
-        })
-        //阻止表单默认提交行为
+        type: 'post',
+        url: 'http://47.111.184.55:3000/settings',
+        data: formData,
+        success: function() {
+            location.reload()
+        }
+    })
+
+    //阻止表单默认提交行为
     return false
+})
+
+//向服务器端发送请求 索要网站设置数据
+$.ajax({
+    //请求方式不是post
+    url: 'http://47.111.184.55:3000/settings',
+    success: function(response) {
+        // console.log(response);
+        if (response) {
+            //将logo地址存储在隐藏域中
+            $('#logoman').val(response.logo)
+
+            //将logo显示在页面中
+            $('#preview').attr('src', response.logo)
+
+            //将网站标题显示在页面中
+            $('input[name="title"]').val(response.title)
+
+        }
+
+    }
 })
