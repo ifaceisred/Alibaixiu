@@ -81,7 +81,7 @@ $(function() {
                     type: 'get',
                     url: 'http://47.111.184.55:3000/categories',
                     success: function(categories) {
-                        console.log(response);
+                        // console.log(response);
                         //将获取到的所有分类数据添加到文章数据中
                         //是为了方便对页面进行分类遍历，渲染
                         response.categories = categories
