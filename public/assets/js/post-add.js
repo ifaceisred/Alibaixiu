@@ -53,4 +53,61 @@ $(function() {
         })
         return false;
     })
+
+
+    // console.log(getUrlParams('id'));
+    var id = getUrlParams('id')
+
+    //从浏览器得地址栏中获取查询参数
+    function getUrlParams(name) {
+        var paramsAry = location.search.substr(1).split('&');
+        for (var i = 0; i < paramsAry.length; i++) {
+            var tmp = paramsAry[i].split('=')
+            if (tmp[0] == name) {
+                return tmp[1]
+            }
+        }
+        return -1
+    }
+    if (id != -1) {
+        $.ajax({
+            type: 'get',
+            url: `http://47.111.184.55:3000/posts/${id}`,
+            success: function(response) {
+
+                //这里需要再次获取分类列表
+                //因为后台返回的只有文章分类，并没有所有得分类
+                $.ajax({
+                    type: 'get',
+                    url: 'http://47.111.184.55:3000/categories',
+                    success: function(categories) {
+                        console.log(response);
+                        //将获取到的所有分类数据添加到文章数据中
+                        //是为了方便对页面进行分类遍历，渲染
+                        response.categories = categories
+                        var html = template('modifyTpl', response);
+                        // console.log(html);
+                        $('#parentBox').html(html)
+                    }
+                })
+            }
+        })
+    }
+    //实现编辑后，同步到数据库
+    //当修改文章信息表单发送提交行为得时候
+    $('#parentBox').on('submit', '#modifyForm', function() {
+        //获取管理员在表单中输入的内容
+        var formData = $(this).serialize();
+        //获取管理员正在修改的文章得id值
+        var id = $(this).attr('response-id');
+        $.ajax({
+            type: 'put',
+            url: `http://47.111.184.55:3000/posts/${id}`,
+            data: formData,
+            success: function() {
+                location.href = './posts.html'
+            }
+        })
+        return false
+    })
 })
