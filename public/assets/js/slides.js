@@ -54,7 +54,7 @@ $.ajax({
 $('#slidesParent').on('click', '.delete', function() {
     if (confirm('真的要删?')) {
         var id = $(this).attr('response-id')
-        alert(id)
+            // alert(id)
         $.ajax({
             type: 'delete',
             url: `http://47.111.184.55:3000/slides/${id}`,
